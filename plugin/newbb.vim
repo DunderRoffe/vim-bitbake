@@ -34,31 +34,40 @@ fun! BBHeader()
     let l:current_year = strftime("%Y")
     let l:user_name = <SID>GetUserName()
     let l:user_email = <SID>GetUserEmail()
-    0 put ='# Copyright (C) ' . l:current_year .
+    0 put ='#'
+    put ='# Copyright (C) ' . l:current_year .
                 \ ' ' . l:user_name . ' <' . l:user_email . '>'
-    put ='# Released under the MIT license (see COPYING.MIT for the terms)'
+    put ='# SPDX-License-Identifier: MIT'
+    put ='#'
+    put =''
     $
 endfun
 
 fun! NewBBTemplate()
     let l:paste = &paste
     set nopaste
-    
+
+    let l:user_name = <SID>GetUserName()
+    let l:user_email = <SID>GetUserEmail()
+
     " Get the header
     call BBHeader()
 
     " New the bb template
+    put ='SUMMARY = \"\"'
     put ='DESCRIPTION = \"\"'
+    put ='AUTHOR = \"'. l:user_name . ' <' . l:user_email . '>\"'
     put ='HOMEPAGE = \"\"'
-    put ='LICENSE = \"\"' 
-    put ='SECTION = \"\"'
+    put ='LICENSE = \"MPL-2.0\"'
+    put ='LIC_FILES_CHKSUM = \"file://LICENSE;md5=815ca599c9df247a0c7f619bab123dad\"'
     put ='DEPENDS = \"\"'
     put =''
+    put ='SRCREV = \"\"'
     put ='SRC_URI = \"\"'
 
     " Go to the first place to edit
-    0
-    /^DESCRIPTION =/
+    6
+    /^SUMMARY =/
     exec "normal 2f\""
 
     if paste == 1
